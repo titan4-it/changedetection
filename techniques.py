@@ -16,28 +16,36 @@ def calculate_bu(image_path, output_path, method):
         # Calculate the Built-Up Index (BU) based on the specified method
         if method == 'NDBI':
             # Normalized Difference Built-up Index (NDBI)
-            bu = (band_swir - band_nir) / (band_swir + band_nir + epsilon)
-            explanation = "Normalized Difference Built-up Index (NDBI):\nNDBI = (SWIR - NIR) / (SWIR + NIR)"
+            bu = (band_swir2 - band_nir) / (band_swir2 + band_nir )
+       
         elif method == 'MBUI':
             # Modified Built-up Index (MBUI)
             bu = (2 * (band_swir - band_nir) - (band_green - band_red)) / (2 * (band_swir - band_nir) + (band_green - band_red) + epsilon)
-            explanation = "Modified Built-up Index (MBUI):\nMBUI = (2 * (SWIR - NIR) - (Green - Red)) / (2 * (SWIR - NIR) + (Green - Red))"
-        elif method == 'BUAI':
+
+        elif method == 'NBAI':
             # Built-Up Area Index (BUAI)
-            bu = (band_green + band_swir) / (band_red + band_nir + epsilon)
-            explanation = "Built-Up Area Index (BUAI):\nBUAI = (Green + SWIR) / (Red + NIR)"
-        elif method == 'SR':
+            bu = (band_swir2 - band_swir)/ band_green 
+ 
+        elif method == 'NBI':
             # Simple Ratio (SR)
-            bu = band_swir / (band_nir + epsilon)
-            explanation = "Simple Ratio (SR):\nSR = SWIR / NIR"
-        elif method == 'EBUI':
+            bu = (band_red * band_swir2) / (band_nir )
+
+        elif method == 'MBI':
             # Enhanced Built-Up Index (EBUI)
-            bu = (2 * (band_swir - band_nir) - (band_red - band_green)) / (2 * (band_swir - band_nir) + (band_red - band_green) + epsilon)
-            explanation = "Enhanced Built-Up Index (EBUI):\nEBUI = (2 * (SWIR - NIR) - (Red - Green)) / (2 * (SWIR - NIR) + (Red - Green))"
+            bu = ((band_swir * band_red) - (band_nir * band_nir)) / (band_red + band_nir + band_swir)
+
         elif method == 'UI':
             # Urban Index (UI)
-            bu = (band_blue + 2.5 * band_green - 1.5 * band_swir - band_nir) / (band_blue + 2.5 * band_green - 1.5 * band_swir + band_nir + epsilon)
-            explanation = "Urban Index (UI):\nUI = (Blue + 2.5 * Green - 1.5 * SWIR - NIR) / (Blue + 2.5 * Green - 1.5 * SWIR + NIR)"
+            bu = (band_swir - band_nir)/(band_swir + band_nir)
+            
+        elif method == 'BAEI':
+                
+            bu = (band_red + 0.3) / (band_green + band_swir)
+
+        elif method == 'BRBA':
+              
+            bu = band_red / band_swir2
+
         else:
             print("Invalid method specified.")
             return
@@ -78,12 +86,12 @@ def check_alignment(image1_path, image2_path):
         return True
 
 # Paths to the input GeoTIFF files
-image1_path = 'S2B_MSIL1C_20230728T093549_N0509_R036_T33TXF_20230728T102944_resampled.tif'
-image2_path = 'S2B_MSIL1C_20230827T093549_N0509_R036_T33TXF_20230827T114636_resampled.tif'
+image1_path = 'S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_resampled_rome.tif'
+image2_path = 'S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_resampled_rome.tif'
 
 # Paths to the output GeoTIFF files
-output1_path = 'S2B_MSIL1C_20230728T093549_N0509_R036_T33TXF_20230728T102944_resampled_output1_bu1.tif'
-output2_path = 'S2B_MSIL1C_20230827T093549_N0509_R036_T33TXF_20230827T114636_resampled_output2_bu1.tif'
+output1_path = 'S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_resampled_rome_output1_bu1.tif'
+output2_path = 'S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_resampled_rome_output2_bu1.tif'
 
 # Specify the method for BU calculation
 method = 'EBUI'  # Change this to the desired method
