@@ -40,7 +40,11 @@ def calculate_bu(masked_image):
     band_5 = masked_image[5]
     band_6 = masked_image[6]
     band_8 = masked_image[8]
+<<<<<<< HEAD
     band_11 = masked_image[12]
+=======
+    band_11 = masked_image[11]
+>>>>>>> 1203e55df2764a988e2e7b937f61d76f4c117626
    
     epsilon = np.finfo(float).eps
     ndvi = (band_8 - band_4) / (band_8 + band_4 + epsilon)
