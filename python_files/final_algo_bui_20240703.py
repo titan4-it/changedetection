@@ -34,13 +34,11 @@ def create_urban_mask(landcover_path, urban_value=7):
 def apply_mask(image_data, mask_data):
     masked_image = np.where(mask_data == 1, image_data, np.nan)
     return masked_image
-
+#trying to mask the images
 def calculate_bu(masked_image):
     band_4 = masked_image[4]
-    band_5 = masked_image[5]
-    band_6 = masked_image[6]
     band_8 = masked_image[8]
-    band_11 = masked_image[11]
+    band_11 = masked_image[12]
    
     epsilon = np.finfo(float).eps
     ndvi = (band_8 - band_4) / (band_8 + band_4 + epsilon)
@@ -85,14 +83,6 @@ def plot_pixel_values_bu(pixel_values_bu1,pixel_values_bu2):
     plt.grid(True)
     plt.show()
 # Paths to the input and output files
-# landcover_image_path = '/home/aneesha/change_detection/rome_landcover_clipped.tif'
-# image1_path = '/home/aneesha/change_detection/S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_bilinear_rome.tif'
-# image2_path = '/home/aneesha/change_detection/S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_bilinear_rome.tif'
-# output_bu1_path = '/home/aneesha/change_detection/bu_output1.tif'
-# output_bu2_path = '/home/aneesha/change_detection/bu_output2.tif'
-# output_diff_path = '/home/aneesha/change_detection/difference_bu.tif'
-# reprojected_landcover_path = '/home/aneesha/change_detection/reprojected_landcover.tif'
-
 landcover_image_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Rome_landcover.tif'
 image1_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Images_Sentinel2/S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_resampled_rome.tif'
 image2_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Images_Sentinel2/S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_resampled_rome.tif'
@@ -115,7 +105,7 @@ coordinates = [
 ]
 # Read images and mask
 image1_data, meta = read_image(image1_path)
-image2_data, meta = read_image(image2_path)
+image2_data, _ = read_image(image2_path)
 # Create urban mask
 mask_path = create_urban_mask(landcover_image_path, urban_value=7)
 with rasterio.open(mask_path) as mask_src:
@@ -133,7 +123,30 @@ with rasterio.open(output_bu1_path, 'w', **meta) as dst:
 with rasterio.open(output_bu2_path, 'w', **meta) as dst:
     dst.write(bu2, 1)
 # Compute the difference image
+
+# Define the threshold range
+threshold_min = -0.3
+threshold_max = 0.3
+no_data_value = np.nan  # Define your no data value
+
+
+# Apply threshold to bu1
+bu1 = np.where((bu1 >= threshold_min) & (bu1 <= threshold_max), bu1, no_data_value)
+
+# Apply threshold to bu2
+bu2 = np.where((bu2 >= threshold_min) & (bu2 <= threshold_max), bu2, no_data_value)
+
+# Save the thresholded bu1
+with rasterio.open(output_bu1_path, 'w', **meta) as dst:
+    dst.write(bu1, 1)
+
+# Save the thresholded bu2
+with rasterio.open(output_bu2_path, 'w', **meta) as dst:
+    dst.write(bu2, 1)
+
+# Compute the difference image
 diff = bu1 - bu2
+
 # Save the difference image
 with rasterio.open(output_diff_path, 'w', **meta) as dst:
     dst.write(diff, 1)
@@ -168,12 +181,12 @@ def plot_results(landcover_path, bu1_path, bu2_path, diff_path, coordinates):
     # Plot bu1
     plt.subplot(2, 2, 3)
     plt.imshow(bu1_data, cmap='coolwarm')
-    plt.colorbar(label='BU1 Value',boundaries=[-0.8,-0.6,-0.4,-0.2,0,0.2,0.4,0.6,0.8],ticklocation='auto')
+    plt.colorbar(label='BU1 Value',boundaries=[-0.6,-0.4,-0.2,0,0.2,0.4,0.6],ticklocation='auto')
     plt.title('BU1 Image')  
     # Plot bu2
     plt.subplot(2, 2, 4)
     plt.imshow(bu2_data, cmap='coolwarm')
-    plt.colorbar(label='BU2 Value',boundaries=[-0.8,-0.6,-0.4,-0.2,0,0.2,0.4,0.6,0.8],ticklocation='auto')
+    plt.colorbar(label='BU2 Value',boundaries=[-0.6,-0.4,-0.2,0,0.2,0.4,0.6],ticklocation='auto')
     plt.title('BU2 Image')
     # Plot difference image
     plt.subplot(2, 2, 2)

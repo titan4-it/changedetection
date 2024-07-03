@@ -17,7 +17,7 @@ def calculate_bu(image_path, output_path):
         band_green = src.read(3).astype('float32') / 10000
         band_blue = src.read(2).astype('float32') / 10000
         band_nir = src.read(8).astype('float32') / 10000
-        band_swir = src.read(11).astype('float32') / 10000
+        band_swir = src.read(12).astype('float32') / 10000
         band_5 = src.read(5).astype('float32') / 10000
         band_6 = src.read(6).astype('float32') / 10000
 
@@ -139,15 +139,24 @@ def plot_results(landcover_path, diff_path, masked_diff_path):
     plt.show()
 
 # Paths to the input and output files
-landcover_image_path = 'landcover_sentinelhub_rome.tif'
-image1_path = 'S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_bilinear_rome.tif'
-image2_path = 'S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_bilinear_rome.tif'
-output_bu1_path = 'bu_output1.tif'
-output_bu2_path = 'bu_output2.tif'
-output_diff_path = 'difference_bu.tif'
-output_masked_diff_path = 'masked_difference_bu.tif'
-reprojected_landcover_path = 'reprojected_landcover.tif'
+#landcover_image_path = 'landcover_sentinelhub_rome.tif'
+#image1_path = 'S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_bilinear_rome.tif'
+#image2_path = 'S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_bilinear_rome.tif'
+#output_bu1_path = 'bu_output1.tif'
+#output_bu2_path = 'bu_output2.tif'
+#output_diff_path = 'difference_bu.tif'
+#output_masked_diff_path = 'masked_difference_bu.tif'
+#reprojected_landcover_path = 'reprojected_landcover.tif'
 
+
+landcover_image_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Rome_landcover.tif'
+image1_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Images_Sentinel2/S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_resampled_rome.tif'
+image2_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Images_Sentinel2/S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_resampled_rome.tif'
+output_bu1_path = '/Users/aneesha_work/Documents/Images_Sentinel2/bu_output1.tif'
+output_bu2_path = '/Users/aneesha_work/Documents/Images_Sentinel2/bu_output2.tif'
+output_diff_path = '/Users/aneesha_work/Documents/Images_Sentinel2/difference_bu.tif'
+output_masked_diff_path = '/Users/aneesha_work/Documents/Images_Sentinel2/masked_difference_bu.tif'
+reprojected_landcover_path = '/Users/aneesha_work/Documents/Images_Sentinel2/reprojected_landcover.tif'
 # Calculate BU for each image
 calculate_bu(image1_path, output_bu1_path)
 calculate_bu(image2_path, output_bu2_path)

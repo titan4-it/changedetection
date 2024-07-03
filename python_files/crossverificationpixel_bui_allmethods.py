@@ -10,8 +10,8 @@ def calculate_bu(image_path, method, output_path):
         band_green = src.read(3).astype('float32') / 10000
         band_blue = src.read(2).astype('float32') / 10000
         band_nir = src.read(8).astype('float32') / 10000
-        band_swir = src.read(11).astype('float32') / 10000
-        band_swir2 = src.read(12).astype('float32') / 10000
+        band_swir = src.read(12).astype('float32') / 10000
+        band_swir2 = src.read(13).astype('float32') / 10000
         
         # Avoid division by zero by adding a small constant (epsilon)
         epsilon = np.finfo(float).eps
@@ -66,8 +66,8 @@ def layer_stack(input_dir, output_path):
             dst.write(bu_image.read(1), idx)
 
 # Paths to the input GeoTIFF files
-image1_path = 'S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_bilinear_rome.tif'
-image2_path = 'S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_bilinear_rome.tif'
+image1_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Images_Sentinel2/S2A_MSIL1C_20240214T100121_N0510_R122_T33TTG_20240214T104957_resampled_rome.tif'
+image2_path = '/Users/aneesha_work/Documents/Images_Sentinel2/Images_Sentinel2/S2A_MSIL1C_20230818T100031_N0509_R122_T33TTG_20230818T121434_resampled_rome.tif'
 
 # List of methods for BU calculation
 methods = ['NDBI', 'NBAI', 'NBI', 'MBI', 'UI', 'BAEI', 'BRBA', 'new_BUI']
